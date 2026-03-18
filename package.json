@@ -1,0 +1,27 @@
+{
+  "name": "taskmanager-api",
+  "version": "1.0.0",
+  "description": "Simple task manager api.",
+  "keywords": [
+    "task-manager",
+    "api",
+    "nodejs",
+    "expressjs",
+    "backend"
+  ],
+  "homepage": "https://github.com/Shaedow2000/TaskManager-API#readme",
+  "bugs": {
+    "url": "https://github.com/Shaedow2000/TaskManager-API/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shaedow2000/TaskManager-API.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Shaedow2000",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
