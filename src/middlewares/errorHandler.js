@@ -5,8 +5,8 @@ const errorHandler = ( err, _req, res, _next ) => {
     console.log( `[ ERROR ]<${ statusCode }>=> ${ errMessage }` );
     
     res.status( statusCode ).json( {
-        'error': errMessage,
-        'code': statusCode
+        'status': statusCode,
+        'message': errMessage
     } );
 }
 
