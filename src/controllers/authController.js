@@ -5,7 +5,7 @@ const register = wrapper( async ( req, res ) => {
     const data = req.body;
 
     const newAccount = new AccountModel( data );
-    newAccount.save();
+    await newAccount.save();
 
     return res.status( 201 ).json( {
         'status': 201,
