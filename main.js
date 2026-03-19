@@ -12,9 +12,18 @@ app.use( '/api', router );
 app.use( errorHandler );
 
 // Start server
-const PORT = process.env.PORT;
+async function start() {
+    const PORT = process.env.PORT;
+    
+    try {
+        app.listen( PORT, () => {
+            console.log( `=> Listening on PORT:${ PORT }` );
+        } );
 
-app.listen( PORT, () => {
-    console.log( `=> Listening on PORT:${ PORT }` );
-    connect(); 
-} );
+        await connect();
+    } catch ( err ) {
+        console.log( `!> Error connecting to Data Base: ${ err.message }` );
+    }
+}
+
+start();
