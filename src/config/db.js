@@ -4,7 +4,7 @@ import 'dotenv/config';
 const URI = process.env.URI;
 
 export default async function connect() {
-    await mongoose.connect( URI ).then( () => {
-        console.log( '=> Connected to DataBase.' );
-    } );
+    await mongoose.connect( URI );
+
+    console.log( '=> Connected to DataBase.' );
 }
