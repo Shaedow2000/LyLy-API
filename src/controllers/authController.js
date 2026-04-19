@@ -5,6 +5,9 @@ import AccountModel from "../models/account.js";
 
 const register = wrapper(async (req, res) => {
   const data = req.body;
+  const salt = 10;
+
+  data.password = await bcrypt.hash(data.password, salt);
 
   const newAccount = new AccountModel(data);
   await newAccount.save();
