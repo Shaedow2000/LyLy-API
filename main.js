@@ -7,6 +7,7 @@ import connect from "./src/config/db.js";
 import router from "./src/routes/protected.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import publicRouter from "./src/routes/public.js";
+import tokenVerification from "./src/middlewares/tokenVerification.js";
 
 const app = express();
 
@@ -16,8 +17,8 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use("/api", router);
 app.use("/auth", publicRouter);
+app.use("/api", tokenVerification, router);
 app.use(errorHandler);
 
 // Start server
