@@ -33,8 +33,8 @@ const login = wrapper(async (req, res) => {
         account: user,
       });
     } else {
-      return res.status(403).json({
-        status: 403,
+      return res.status(401).json({
+        status: 401,
         message: "Authentification error",
         account: null,
       });
@@ -63,8 +63,8 @@ const deleteAccount = wrapper(async (req, res) => {
         account: null,
       });
     } else {
-      return res.status(403).json({
-        status: 403,
+      return res.status(401).json({
+        status: 401,
         message: "Authentification error",
         account: null,
       });
