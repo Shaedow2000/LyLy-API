@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import "dotenv/config";
 
 import wrapper from "../middlewares/asyncWrapper.js";
 import AccountModel from "../models/account.js";
@@ -12,10 +13,15 @@ const register = wrapper(async (req, res) => {
   const newAccount = new AccountModel(data);
   await newAccount.save();
 
+  const token = jwt.sign({ email: data.email }, process.env.JWT_SECRET, {
+    expiresIn: "1y",
+  });
+
   return res.status(201).json({
     status: 201,
     message: "Account created successfully!",
     account: data,
+    token: token,
   });
 });
 
@@ -35,7 +41,7 @@ const login = wrapper(async (req, res) => {
     } else {
       return res.status(401).json({
         status: 401,
-        message: "Authentification error",
+        message: "Account not found",
         account: null,
       });
     }
@@ -65,7 +71,7 @@ const deleteAccount = wrapper(async (req, res) => {
     } else {
       return res.status(401).json({
         status: 401,
-        message: "Authentification error",
+        message: "Account not found",
         account: null,
       });
     }
