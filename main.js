@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from "body-parser";
 import cors from "cors";
 import "dotenv/config";
 
@@ -11,6 +12,8 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/api", router);

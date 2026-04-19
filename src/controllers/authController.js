@@ -19,7 +19,7 @@ const register = wrapper(async (req, res) => {
 const login = wrapper(async (req, res) => {
   const { email, password } = req.body;
 
-  const user = AccountModel.find({ email: email }, { __v: false });
+  const user = await AccountModel.findOne({ email }, { __v: false });
 
   if (user) {
     const isUser = await bcrypt.compare(user.password, password);
