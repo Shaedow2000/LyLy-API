@@ -1,10 +1,12 @@
 import express from "express";
 
+import { getAll } from "../controllers/taskController.js";
+
 const router = express.Router();
 
 router
   .route("/tasks")
-  .get((req, res, next) => {})
+  .get(getAll)
   .post((req, res, next) => {});
 
 router

@@ -1,7 +1,14 @@
 import wrapper from "../middlewares/asyncWrapper.js";
 import TaskModel from "../models/task.js";
 
-const getAll = wrapper(async (req, res) => {});
+const getAll = wrapper(async (req, res) => {
+  const tasks = await TaskModel.find({}, { __v: false });
+
+  return res.status(200).json({
+    status: 200,
+    data: tasks,
+  });
+});
 
 const getById = wrapper(async (req, res) => {});
 
