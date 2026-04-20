@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 
 const TaskSchema = new mongoose.Schema({
+  id: Number,
   title: String,
   text: {
     type: String,
