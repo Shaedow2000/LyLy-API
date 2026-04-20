@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import AccountModel from "../models/account";
+import AccountModel from "../models/account.js";
 
 const tokenVerification = async (req, res, next) => {
   const authHeader = req.headers["authorization"];

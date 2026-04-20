@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 import wrapper from "../middlewares/asyncWrapper.js";
@@ -13,15 +14,10 @@ const register = wrapper(async (req, res) => {
   const newAccount = new AccountModel(data);
   await newAccount.save();
 
-  const token = jwt.sign({ email: data.email }, process.env.JWT_SECRET, {
-    expiresIn: "1y",
-  });
-
   return res.status(201).json({
     status: 201,
     message: "Account created successfully!",
     account: data,
-    token: token,
   });
 });
 
@@ -33,10 +29,19 @@ const login = wrapper(async (req, res) => {
   if (user) {
     const isUser = await bcrypt.compare(password, user.password);
     if (isUser) {
+      const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+        expiresIn: "1y",
+      });
+
       return res.status(200).json({
         status: 200,
         message: "Loged in successfuly!",
-        account: user,
+        account: {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+        },
+        token: token,
       });
     } else {
       return res.status(401).json({
