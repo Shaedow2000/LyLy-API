@@ -13,8 +13,8 @@ const router = express.Router();
 router.route("/tasks").get(getAll).post(post);
 
 router
-  .route("/task/:title")
-  .get((req, res, next) => {})
+  .route("/task/:id")
+  .get(getById)
   .patch((req, res, next) => {})
   .delete((req, res, next) => {});
 
