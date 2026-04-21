@@ -1,13 +1,16 @@
 import express from "express";
 
-import { getAll } from "../controllers/taskController.js";
+import {
+  getAll,
+  getById,
+  post,
+  patchById,
+  deleteById,
+} from "../controllers/taskController.js";
 
 const router = express.Router();
 
-router
-  .route("/tasks")
-  .get(getAll)
-  .post((req, res, next) => {});
+router.route("/tasks").get(getAll).post(post);
 
 router
   .route("/task/:title")

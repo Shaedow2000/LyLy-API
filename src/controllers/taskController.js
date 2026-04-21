@@ -3,7 +3,7 @@ import TaskModel from "../models/task.js";
 
 const getAll = wrapper(async (req, res) => {
   const userEmail = req.user.email;
-  const tasks = await TaskModel.find({ user: userEmail }, { __v: false });
+  const tasks = await TaskModel.findOne({ user: userEmail }, { __v: false });
 
   return res.status(200).json({
     status: 200,
@@ -13,7 +13,19 @@ const getAll = wrapper(async (req, res) => {
 
 const getById = wrapper(async (req, res) => {});
 
-const post = wrapper(async (req, res) => {});
+const post = wrapper(async (req, res) => {
+  const userEmail = req.user.email;
+  const { title, text } = req.body;
+  const newTask = { title, text };
+
+  const updated = await TaskModel.findOneAndUpdate(
+    { user: userEmail },
+    { $push: { tasks: newTask } },
+    { returnDocument: "after", runValidators: true },
+  );
+
+  return res.json({ msg: "yes" });
+});
 
 const patchById = wrapper(async (req, res) => {});
 

@@ -2,13 +2,13 @@ import * as mongoose from "mongoose";
 
 const TaskSchema = new mongoose.Schema({
   user: {
-    type: { type: String },
+    type: String,
     required: true,
   },
-  task: [
+  tasks: [
     {
       id: { type: Number },
-      title: { type: String },
+      title: { type: String, required: true },
       text: {
         type: String,
         default: "No tasks yet!",
