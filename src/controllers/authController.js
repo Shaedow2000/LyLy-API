@@ -75,6 +75,7 @@ const deleteAccount = wrapper(async (req, res) => {
     const isUser = await bcrypt.compare(password, user.password);
     if (isUser) {
       await AccountModel.deleteOne({ email });
+      await TaskModel.deleteOne({ user: email });
       return res.status(202).json({
         status: 202,
         message: "Account deleted successfully",
