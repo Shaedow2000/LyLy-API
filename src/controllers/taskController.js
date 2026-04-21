@@ -18,13 +18,17 @@ const post = wrapper(async (req, res) => {
   const { title, text } = req.body;
   const newTask = { title, text };
 
-  const updated = await TaskModel.findOneAndUpdate(
+  await TaskModel.findOneAndUpdate(
     { user: userEmail },
     { $push: { tasks: newTask } },
     { returnDocument: "after", runValidators: true },
   );
 
-  return res.json({ msg: "yes" });
+  return res.status(201).json({
+    status: 201,
+    message: "Task created sucessfully",
+    data: newTask,
+  });
 });
 
 const patchById = wrapper(async (req, res) => {});
