@@ -1,5 +1,6 @@
 import wrapper from "../middlewares/asyncWrapper.js";
 import TaskModel from "../models/task.js";
+import { Types } from "mongoose";
 
 const getAll = wrapper(async (req, res) => {
   const userEmail = req.user.email;
@@ -11,7 +12,19 @@ const getAll = wrapper(async (req, res) => {
   });
 });
 
-const getById = wrapper(async (req, res) => {});
+const getById = wrapper(async (req, res) => {
+  const userEmail = req.user.email;
+
+  const task = await TaskModel.findOne(
+    { user: userEmail, "tasks._id": new Types.ObjectId(req.params.id) },
+    { __v: false },
+  );
+
+  return res.status(200).json({
+    status: 200,
+    data: task,
+  });
+});
 
 const post = wrapper(async (req, res) => {
   const userEmail = req.user.email;
@@ -26,7 +39,6 @@ const post = wrapper(async (req, res) => {
 
   return res.status(201).json({
     status: 201,
-    message: "Task created sucessfully",
     data: newTask,
   });
 });
