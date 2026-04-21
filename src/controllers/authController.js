@@ -4,6 +4,7 @@ import "dotenv/config";
 
 import wrapper from "../middlewares/asyncWrapper.js";
 import AccountModel from "../models/account.js";
+import TaskModel from "../models/task.js";
 
 const register = wrapper(async (req, res) => {
   const data = req.body;
@@ -13,6 +14,12 @@ const register = wrapper(async (req, res) => {
 
   const newAccount = new AccountModel(data);
   await newAccount.save();
+
+  const newTasksData = new TaskModel({
+    user: data.email,
+    tasks: [],
+  });
+  await newTasksData.save();
 
   return res.status(201).json({
     status: 201,
