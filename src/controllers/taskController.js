@@ -7,6 +7,7 @@ const getAll = wrapper(async (req, res) => {
 
   return res.status(200).json({
     status: 200,
+    message: `Get all tasks for user: ${userEmail}`,
     data: tasks,
   });
 });
@@ -20,6 +21,7 @@ const getById = wrapper(async (req, res) => {
 
   return res.status(200).json({
     status: 200,
+    message: `Get task [ ${req.params.id} ] for user: ${userEmail}`,
     data: task,
   });
 });
@@ -37,6 +39,7 @@ const post = wrapper(async (req, res) => {
 
   return res.status(201).json({
     status: 201,
+    message: `Task created sucessfully`,
     data: newTask,
   });
 });
@@ -56,6 +59,7 @@ const patchById = wrapper(async (req, res) => {
 
   return res.status(202).json({
     status: 202,
+    message: `Task updated sucessfully`,
     data: task,
   });
 });
@@ -70,6 +74,7 @@ const deleteById = wrapper(async (req, res) => {
 
   return res.status(202).json({
     status: 202,
+    message: `Deleted task sucessfully`,
     data: null,
   });
 });
