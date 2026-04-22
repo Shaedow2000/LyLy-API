@@ -19,6 +19,14 @@ const getById = wrapper(async (req, res) => {
 
   const task = data.tasks.find((task) => String(task._id) === req.params.id);
 
+  if (!task) {
+    return res.status(404).json({
+      status: 404,
+      message: `Task with id [ ${req.params.id} ] was not found`,
+      data: null,
+    });
+  }
+
   return res.status(200).json({
     status: 200,
     message: `Get task [ ${req.params.id} ] for user: ${userEmail}`,
