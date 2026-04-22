@@ -60,6 +60,18 @@ const patchById = wrapper(async (req, res) => {
   });
 });
 
-const deleteById = wrapper(async (req, res) => {});
+const deleteById = wrapper(async (req, res) => {
+  const userEmail = req.user.email;
+  const data = await TaskModel.findOne({ user: userEmail }, { __v: false });
+
+  data.tasks = data.tasks.filter((task) => String(task._id) !== req.params.id);
+
+  await data.save();
+
+  return res.status(202).json({
+    status: 202,
+    data: null,
+  });
+});
 
 export { getAll, getById, post, patchById, deleteById };
