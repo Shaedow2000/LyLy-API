@@ -9,13 +9,55 @@ import TaskModel from "../models/task.js";
 import sendVerificationEmail from "../config/resend.js";
 
 const register = wrapper(async (req, res) => {
-  const data = req.body;
+  const { username, email, password } = req.body;
+  const data = { username, email, password };
   const salt = 10;
 
   data.password = await bcrypt.hash(data.password, salt);
 
+  const code = crypt.randomInt(100000, 999999).toString();
+
+  data.verificationCode = code;
+  data.verificationExpiry = new Date(Date.now() + 10 * 60 * 1000);
+
   const newAccount = new AccountModel(data);
   await newAccount.save();
+
+  await sendVerificationEmail(data.email, code);
+
+  return res.status(202).json({
+    status: 202,
+    message: `Verification code sent to ${data.email}. Please check you email.`,
+  });
+});
+
+const verify = wrapper(async (req, res) => {
+  const { email, code } = req.body;
+  const user = await AccountModel.findOne({ email }, { __v: false });
+
+  if (!user)
+    return res.status(404).json({
+      status: 404,
+      message: "Account not found",
+      account: null,
+    });
+
+  if (user.verificationCode !== code)
+    return res.status(401).json({
+      status: 401,
+      message: "Invalid verification code",
+    });
+
+  if (user.verificationExpiry < new Date())
+    return res.status(401).json({
+      status: 401,
+      message: "Verification code exipred",
+    });
+
+  await AccountModel.findOneAndUpdate(
+    { email },
+    { isVerified: true, verificationCode: null, verificationExpiry: null },
+  );
 
   const newTasksData = new TaskModel({
     user: data.email,
@@ -27,6 +69,39 @@ const register = wrapper(async (req, res) => {
     status: 201,
     message: "Account created successfully!",
     account: data,
+  });
+});
+
+const resend_code = wrapper(async (req, res) => {
+  const { email } = req.body;
+
+  const user = await UserModel.findOne({ email });
+  if (!user)
+    return res.status(404).json({
+      status: 404,
+      message: "Account not found",
+      account: null,
+    });
+
+  if (user.isVerified)
+    return res.status(401).json({
+      status: 401,
+      message: "Account already verified",
+    });
+
+  const code = crypto.randomInt(100000, 999999).toString();
+  const expiry = new Date(Date.now() + 10 * 60 * 1000);
+
+  await UserModel.findOneAndUpdate(
+    { email },
+    { verificationCode: code, verificationExpiry: expiry },
+  );
+
+  await sendVerificationEmail(email, code);
+
+  return res.status(202).json({
+    status: 202,
+    message: `New verification code sent to ${email}`,
   });
 });
 
@@ -63,7 +138,7 @@ const login = wrapper(async (req, res) => {
     return res.status(404).json({
       status: 404,
       message: "Account not found",
-      account: undefined,
+      account: null,
     });
   }
 });
@@ -99,4 +174,4 @@ const deleteAccount = wrapper(async (req, res) => {
   }
 });
 
-export { register, login, deleteAccount };
+export { register, verify, resend_code, login, deleteAccount };
