@@ -41,7 +41,24 @@ const post = wrapper(async (req, res) => {
   });
 });
 
-const patchById = wrapper(async (req, res) => {});
+const patchById = wrapper(async (req, res) => {
+  const userEmail = req.user.email;
+  const { title, text } = req.body;
+
+  const data = await TaskModel.findOne({ user: userEmail }, { __v: false });
+
+  const task = data.tasks.find((task) => String(task._id) === req.params.id);
+
+  task.title = title !== undefined ? title : task.title;
+  task.text = text !== undefined ? text : task.text;
+
+  await data.save();
+
+  return res.status(202).json({
+    status: 202,
+    data: task,
+  });
+});
 
 const deleteById = wrapper(async (req, res) => {});
 

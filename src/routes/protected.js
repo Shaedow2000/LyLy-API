@@ -15,7 +15,7 @@ router.route("/tasks").get(getAll).post(post);
 router
   .route("/task/:id")
   .get(getById)
-  .patch((req, res, next) => {})
+  .patch(patchById)
   .delete((req, res, next) => {});
 
 export default router;
