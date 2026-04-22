@@ -1,10 +1,12 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import crypto from "crypto";
 
 import wrapper from "../middlewares/asyncWrapper.js";
 import AccountModel from "../models/account.js";
 import TaskModel from "../models/task.js";
+import sendVerificationEmail from "../config/resend.js";
 
 const register = wrapper(async (req, res) => {
   const data = req.body;

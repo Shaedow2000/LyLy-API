@@ -17,6 +17,9 @@ const AccountSchema = new mongoose.Schema({
     required: [true, "A password is required"],
     minLength: [6, "Password should contain at least 6 characters or more"],
   },
+  isVerified: { type: Boolean, default: false },
+  verificationCode: { type: String },
+  verificationExpiry: { type: Date },
 });
 
 const AccountModel = mongoose.model("Account", AccountSchema);
