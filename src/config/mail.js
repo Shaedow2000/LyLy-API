@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendVerificationEmail = async (username, email, code) => {
-  console.log(username, email, code);
   await transporter.sendMail({
     from: process.env.ZOHO_MAIL,
     to: email,

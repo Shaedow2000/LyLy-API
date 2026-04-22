@@ -54,13 +54,13 @@ const verification = wrapper(async (req, res) => {
       message: "Verification code exipred",
     });
 
-  await AccountModel.findOneAndUpdate(
+  const verifiedAccount = await AccountModel.findOneAndUpdate(
     { email },
     { isVerified: true, verificationCode: null, verificationExpiry: null },
   );
 
   const newTasksData = new TaskModel({
-    user: data.email,
+    user: user.email,
     tasks: [],
   });
   await newTasksData.save();
@@ -68,7 +68,7 @@ const verification = wrapper(async (req, res) => {
   return res.status(201).json({
     status: 201,
     message: "Account created successfully!",
-    account: data,
+    account: verifiedAccount,
   });
 });
 
