@@ -6,7 +6,7 @@ import crypto from "crypto";
 import wrapper from "../middlewares/asyncWrapper.js";
 import AccountModel from "../models/account.js";
 import TaskModel from "../models/task.js";
-import sendVerificationEmail from "../config/resend.js";
+import sendVerificationEmail from "../config/mail.js";
 
 const register = wrapper(async (req, res) => {
   const { username, email, password } = req.body;
@@ -15,7 +15,7 @@ const register = wrapper(async (req, res) => {
 
   data.password = await bcrypt.hash(data.password, salt);
 
-  const code = crypt.randomInt(100000, 999999).toString();
+  const code = crypto.randomInt(100000, 999999).toString();
 
   data.verificationCode = code;
   data.verificationExpiry = new Date(Date.now() + 10 * 60 * 1000);
@@ -23,7 +23,7 @@ const register = wrapper(async (req, res) => {
   const newAccount = new AccountModel(data);
   await newAccount.save();
 
-  await sendVerificationEmail(data.email, code);
+  await sendVerificationEmail(data.username, data.email, code);
 
   return res.status(202).json({
     status: 202,
@@ -31,7 +31,7 @@ const register = wrapper(async (req, res) => {
   });
 });
 
-const verify = wrapper(async (req, res) => {
+const verification = wrapper(async (req, res) => {
   const { email, code } = req.body;
   const user = await AccountModel.findOne({ email }, { __v: false });
 
@@ -75,7 +75,7 @@ const verify = wrapper(async (req, res) => {
 const resend_code = wrapper(async (req, res) => {
   const { email } = req.body;
 
-  const user = await UserModel.findOne({ email });
+  const user = await AccountModel.findOne({ email });
   if (!user)
     return res.status(404).json({
       status: 404,
@@ -92,12 +92,12 @@ const resend_code = wrapper(async (req, res) => {
   const code = crypto.randomInt(100000, 999999).toString();
   const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
-  await UserModel.findOneAndUpdate(
+  await AccountModel.findOneAndUpdate(
     { email },
     { verificationCode: code, verificationExpiry: expiry },
   );
 
-  await sendVerificationEmail(email, code);
+  await sendVerificationEmail(user.username, email, code);
 
   return res.status(202).json({
     status: 202,
@@ -174,4 +174,4 @@ const deleteAccount = wrapper(async (req, res) => {
   }
 });
 
-export { register, verify, resend_code, login, deleteAccount };
+export { register, verification, resend_code, login, deleteAccount };

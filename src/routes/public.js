@@ -2,16 +2,20 @@ import express from "express";
 
 import {
   register,
+  verification,
+  resend_code,
   login,
   deleteAccount,
 } from "../controllers/authController.js";
 
 const publicRouter = express.Router();
 
-publicRouter.route("/login").get(login);
+publicRouter.get("/login", login);
 
-publicRouter.route("/register").post(register);
+publicRouter.post("/register", register);
+publicRouter.post("/verify", verification);
+publicRouter.post("/reverify", resend_code);
 
-publicRouter.route("/unregister").delete(deleteAccount);
+publicRouter.delete("/unregister", deleteAccount);
 
 export default publicRouter;
