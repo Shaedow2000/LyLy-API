@@ -1,12 +1,10 @@
 # Thinc WebApp API source code.
 
-Free Open-Source API for tasks with accounts and auth.
+Thinc WebApp notes API source code, with account management and authentication features.
 
 ![Static Badge](https://img.shields.io/badge/Thinc-API?style=plastic&logo=github&logoColor=white&label=Github&labelColor=black&color=white&link=https%3A%2F%2Fgithub.com%2FShaedow2000%2FThinc-API)
 ![Static Badge](https://img.shields.io/badge/Thinc-API?style=plastic&logo=codeberg&logoColor=white&label=Codeberg&labelColor=blue&color=white&link=https%3A%2F%2Fcodeberg.org%2FShaedow2000%2FThinc-API)
 ![Static Badge](https://img.shields.io/badge/JavaScript-lang?style=plastic&logo=javascript&logoColor=white&label=Lang&labelColor=yellow&color=white)
-
-> This repo contains the source code for the API that the **Thinc** WebApp is using.
 
 ## I - Features
 
