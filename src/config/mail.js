@@ -20,7 +20,7 @@ const sendVerificationEmail = async (username, email, code) => {
       <h2>Hi ${username}</h2>
       <p>We've sent the following one-time password (OTP) to verify your email address. Please note that this code will expire in 10 minutes.</p>
       <h3>${code}</h3>
-      <p>And Thank you for using lyly!</p>
+      <p>And Thank you for using Thinc!</p>
     `,
   });
 };
