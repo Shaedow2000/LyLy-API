@@ -84,7 +84,7 @@ const deleteById = wrapper(async (req, res) => {
   const userEmail = req.user.email;
   const data = await TaskModel.findOne({ user: userEmail }, { __v: false });
 
-  if (!data.tasks.find((task) => String(task._id) !== req.params.id)) {
+  if (!data.tasks.find((task) => String(task._id) === req.params.id)) {
     return res.status(404).json({
       status: 404,
       message: `Task with id [ ${req.params.id} ] was not found`,
