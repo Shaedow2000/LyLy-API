@@ -25,4 +25,23 @@ const sendVerificationEmail = async (username, email, code) => {
   });
 };
 
-export default sendVerificationEmail;
+const sendWelcomeEmail = async (username, email) => {
+  await transporter.sendMail({
+    from: process.env.ZOHO_MAIL,
+    to: email,
+    subject: `Welcome to Thinc!`,
+    hmtl: /* html */ `
+      <h2>Hello ${username},</h2>
+      <p>We give you a big welcome to our app! We activated your account, and now you can freely use it!</p>
+      <p>Start your journey now, just click on the <a href="https://example.com">link</a> to be redirected to the WebApp.</p>
+      </br>
+      <p>To always recieve emails from us, make sure that our email address is not in the spam, and add it to your address book!</p>
+      <p>Feel free to contact us if you encouter a problem: thinc-dev@zohomail.com</p>
+      </br>
+      </br>
+      <p>Salute, from Thinc Dev Team</p>
+    `,
+  });
+};
+
+export { sendVerificationEmail, sendWelcomeEmail };

@@ -6,7 +6,7 @@ import crypto from "crypto";
 import wrapper from "../middlewares/asyncWrapper.js";
 import AccountModel from "../models/account.js";
 import TaskModel from "../models/task.js";
-import sendVerificationEmail from "../config/mail.js";
+import { sendVerificationEmail } from "../config/mail.js";
 
 const register = wrapper(async (req, res) => {
   const { username, email, password } = req.body;
@@ -64,6 +64,8 @@ const verification = wrapper(async (req, res) => {
     tasks: [],
   });
   await newTasksData.save();
+
+  await sendWelcomeEmail(user.username, user.email);
 
   return res.status(201).json({
     status: 201,
