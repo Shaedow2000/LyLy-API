@@ -1,4 +1,4 @@
-# Thinc Task Backend source code (API source code)
+# Thinc WebApp API source code.
 
 Free Open-Source API for tasks with accounts and auth.
 
