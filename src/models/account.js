@@ -20,6 +20,7 @@ const AccountSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   verificationCode: { type: String },
   verificationExpiry: { type: Date },
+  abilityToChangePassword: { type: Boolean, default: false },
 });
 
 const AccountModel = mongoose.model("Account", AccountSchema);

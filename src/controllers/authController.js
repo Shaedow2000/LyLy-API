@@ -107,7 +107,41 @@ const resend_code = wrapper(async (req, res) => {
   });
 });
 
-const reset_password = wrapper(async (req, res) => {});
+const reset_password = wrapper(async (req, res) => {
+  const { email } = req.body;
+  const user = await AccountModel.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({
+      status: 404,
+      message: "Account not found",
+      account: null,
+    });
+  }
+
+  if (!user.abilityToChangePassword) {
+    return res.status(401).json({
+      status: 403,
+      message: "Account not found",
+      account: null,
+    });
+  }
+
+  const code = crypto.randomInt(100000, 999999).toString();
+  const expiry = new Date(Data.now(), 10 * 60 * 1000);
+
+  await AccountModel.findOneAndUpdate(
+    { email },
+    { verificationCode: code, verificationExpiry: expiry },
+  );
+
+  await sendVerificationEmail(user.username, email, code);
+
+  return res.status(202).json({
+    status: 202,
+    message: `New verification code sent to ${email}`,
+  });
+});
 
 const login = wrapper(async (req, res) => {
   const { email, password } = req.body;
