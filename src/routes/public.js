@@ -3,7 +3,7 @@ import express from "express";
 import {
   register,
   verification,
-  resend_code,
+  resend_code_verification,
   login,
   deleteAccount,
   reset_password,

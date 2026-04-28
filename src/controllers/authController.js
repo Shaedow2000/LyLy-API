@@ -107,7 +107,7 @@ const resend_code = wrapper(async (req, res) => {
   });
 });
 
-const reset_password = wrapper(async (req, res) => {
+const reset_password_verification = wrapper(async (req, res) => {
   const { email } = req.body;
   const user = await AccountModel.findOne({ email });
 
@@ -120,7 +120,7 @@ const reset_password = wrapper(async (req, res) => {
   }
 
   if (!user.abilityToChangePassword) {
-    return res.status(401).json({
+    return res.status(403).json({
       status: 403,
       message: "Account not found",
       account: null,
@@ -140,6 +140,49 @@ const reset_password = wrapper(async (req, res) => {
   return res.status(202).json({
     status: 202,
     message: `New verification code sent to ${email}`,
+  });
+});
+
+const reset_password = wrapper(async (req, res) => {
+  const { email, password, code } = req.body;
+  const user = await AccountModel.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({
+      status: 404,
+      message: "Account not found",
+      account: null,
+    });
+  }
+
+  if (user.verificationCode !== code)
+    return res.status(401).json({
+      status: 401,
+      message: "Invalid verification code",
+    });
+
+  if (user.verificationExpiry < new Date())
+    return res.status(401).json({
+      status: 401,
+      message: "Verification code exipred",
+    });
+
+  const salt = 10;
+  const new_hashed_password = bcrypt.hash(password, salt);
+
+  await AccountModel.findOneAndUpdate(
+    { email },
+    {
+      password: new_hashed_password,
+      verificationCode: null,
+      verificationExpiry: null,
+      abilityToChangePassword: false,
+    },
+  );
+
+  return res.status(200).json({
+    status: 200,
+    message: "Updated password successfully",
   });
 });
 
@@ -215,8 +258,7 @@ const deleteAccount = wrapper(async (req, res) => {
 export {
   register,
   verification,
-  reset_password,
-  reset_password,
+  reset_password_verification,
   login,
   deleteAccount,
 };
