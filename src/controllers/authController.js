@@ -132,7 +132,11 @@ const reset_password_verification = wrapper(async (req, res) => {
 
   await AccountModel.findOneAndUpdate(
     { email },
-    { verificationCode: code, verificationExpiry: expiry },
+    {
+      verificationCode: code,
+      verificationExpiry: expiry,
+      abilityToChangePassword: true,
+    },
   );
 
   await sendVerificationEmail(user.username, email, code);
@@ -165,6 +169,12 @@ const reset_password = wrapper(async (req, res) => {
     return res.status(401).json({
       status: 401,
       message: "Verification code exipred",
+    });
+
+  if (!user.abilityToChangePassword)
+    return res.status(403).json({
+      status: 403,
+      message: "Account not found.",
     });
 
   const salt = 10;
