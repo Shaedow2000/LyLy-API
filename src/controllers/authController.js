@@ -107,6 +107,8 @@ const resend_code = wrapper(async (req, res) => {
   });
 });
 
+const reset_password = wrapper(async (req, res) => {});
+
 const login = wrapper(async (req, res) => {
   const { email, password } = req.body;
 
@@ -176,4 +178,11 @@ const deleteAccount = wrapper(async (req, res) => {
   }
 });
 
-export { register, verification, resend_code, login, deleteAccount };
+export {
+  register,
+  verification,
+  reset_password,
+  reset_password,
+  login,
+  deleteAccount,
+};
