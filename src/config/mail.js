@@ -62,8 +62,25 @@ const sendPasswordResetVerificationCode = async (username, email, code) => {
   });
 };
 
+const sendPasswordChangedEmail = async (username, email) => {
+  await transporter.sendMail({
+    from: process.env.ZOHO_MAIL,
+    to: email,
+    subject: "Password changed sucessfully!",
+    html: /* html */ `
+      <h2>Hello ${username},</h2>
+      <p>We have sucessfully changed your password!</p>
+      <p>Go back to the webapp click <a href="https://example.com">here</a>.</p>
+      <p>Feel free to contact us if you encounter a problem: thinc-dev@zohomail.com</p>
+      </br>
+      <p>Salutes, from Thinc Dev Team</p>
+    `,
+  });
+};
+
 export {
   sendVerificationEmail,
   sendWelcomeEmail,
   sendPasswordResetVerificationCode,
+  sendPasswordChangedEmail,
 };

@@ -10,6 +10,7 @@ import {
   sendVerificationEmail,
   sendWelcomeEmail,
   sendPasswordResetVerificationCode,
+  sendPasswordChangedEmail,
 } from "../config/mail.js";
 
 const register = wrapper(async (req, res) => {
@@ -193,6 +194,8 @@ const reset_password = wrapper(async (req, res) => {
       abilityToChangePassword: false,
     },
   );
+
+  await sendPasswordChangedEmail(user.username, email);
 
   return res.status(200).json({
     status: 200,
