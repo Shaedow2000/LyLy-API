@@ -19,8 +19,10 @@ const sendVerificationEmail = async (username, email, code) => {
     html: /* html */ `
       <h2>Hi ${username}</h2>
       <p>We've sent the following one-time password (OTP) to verify your email address. Please note that this code will expire in 10 minutes.</p>
-      <h3>${code}</h3>
+      <h3><b>${code}</b></h3>
       <p>And Thank you for using Thinc!</p>
+      </br>
+      <p>Salutes, from Thinc Dev Team</p>
     `,
   });
 };
@@ -39,9 +41,29 @@ const sendWelcomeEmail = async (username, email) => {
       <p>Feel free to contact us if you encouter a problem: thinc-dev@zohomail.com</p>
       </br>
       </br>
-      <p>Salute, from Thinc Dev Team</p>
+      <p>Salutes, from Thinc Dev Team</p>
     `,
   });
 };
 
-export { sendVerificationEmail, sendWelcomeEmail };
+const sendPasswordResetVerificationCode = async (username, email, code) => {
+  await transporter.sendMail({
+    from: process.env.ZOHO_MAIL,
+    to: email,
+    subject: "Password reset verification",
+    html: /* hmtl */ `
+      <h2>Hello ${username}</h2>
+      <p>We've sent this code to this email, cause we got a request to change the password of this account</p>
+      <p>Use the following code to reset the password:</p>
+      <h3><b>${code}</b></h3>
+      </br>
+      <p>Salutes, from Thinc Dev Team</p>
+    `,
+  });
+};
+
+export {
+  sendVerificationEmail,
+  sendWelcomeEmail,
+  sendPasswordResetVerificationCode,
+};
