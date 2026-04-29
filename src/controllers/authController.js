@@ -268,7 +268,9 @@ const deleteAccount = wrapper(async (req, res) => {
 export {
   register,
   verification,
+  resend_code,
   reset_password_verification,
+  reset_password,
   login,
   deleteAccount,
 };
