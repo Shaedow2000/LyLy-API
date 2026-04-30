@@ -203,6 +203,34 @@ const reset_password = wrapper(async (req, res) => {
   });
 });
 
+const abortChangingPassword = wrapper(async (req, res) => {
+  const id = req.params.id;
+  const user = await AccountModel.findById(id);
+
+  if (!user)
+    return res.status(404).json({
+      status: 404,
+      message: "Account not found",
+      account: null,
+    });
+
+  if (!user.abilityToChangePassword)
+    return res.status(400).json({
+      status: 400,
+      message: "Bad request. Operation already satisfied",
+    });
+
+  await AccountModel.findOneAndUpdate(
+    { _id: id },
+    { abilityToChangePassword: false },
+  );
+
+  return res.status(202).json({
+    status: 202,
+    message: "Abort changing password",
+  });
+});
+
 const login = wrapper(async (req, res) => {
   const { email, password } = req.body;
 
