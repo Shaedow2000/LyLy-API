@@ -306,6 +306,7 @@ export {
   resend_code,
   reset_password_verification,
   reset_password,
+  abortChangingPassword.
   login,
   deleteAccount,
 };

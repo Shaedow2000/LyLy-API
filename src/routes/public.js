@@ -5,6 +5,7 @@ import {
   verification,
   reset_password_verification,
   resend_code,
+  abortChangingPassword,
   login,
   deleteAccount,
   reset_password,
@@ -19,6 +20,8 @@ publicRouter.post("/verify", verification);
 publicRouter.post("/reverify", resend_code);
 publicRouter.post("/reset_verification", reset_password_verification);
 publicRouter.post("/password_reset", reset_password);
+
+publicRouter.get("/user/:id", abortChangingPassword);
 
 publicRouter.delete("/unregister", deleteAccount);
 
