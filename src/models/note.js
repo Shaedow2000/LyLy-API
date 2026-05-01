@@ -1,11 +1,11 @@
 import * as mongoose from "mongoose";
 
-const TaskSchema = new mongoose.Schema({
+const NoteSchema = new mongoose.Schema({
   user: {
     type: String,
     required: true,
   },
-  tasks: [
+  notes: [
     {
       title: {
         type: String,
@@ -18,12 +18,12 @@ const TaskSchema = new mongoose.Schema({
           200,
           "Exeeded text length limit (max up to 200 characters)",
         ],
-        default: "No tasks yet!",
+        default: "No note taken yet!",
       },
     },
   ],
 });
 
-const TaskModel = mongoose.model("Task", TaskSchema);
+const NoteModel = mongoose.model("Note", NoteSchema);
 
-export default TaskModel;
+export default NoteModel;

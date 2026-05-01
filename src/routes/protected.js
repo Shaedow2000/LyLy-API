@@ -6,12 +6,12 @@ import {
   post,
   patchById,
   deleteById,
-} from "../controllers/taskController.js";
+} from "../controllers/noteController.js";
 
 const router = express.Router();
 
-router.route("/tasks").get(getAll).post(post);
+router.route("/notes").get(getAll).post(post);
 
-router.route("/task/:id").get(getById).patch(patchById).delete(deleteById);
+router.route("/note/:id").get(getById).patch(patchById).delete(deleteById);
 
 export default router;

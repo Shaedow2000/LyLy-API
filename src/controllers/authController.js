@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 import wrapper from "../middlewares/asyncWrapper.js";
 import AccountModel from "../models/account.js";
-import TaskModel from "../models/task.js";
+import NoteModel from "../models/note.js";
 import {
   sendVerificationEmail,
   sendWelcomeEmail,
@@ -64,11 +64,11 @@ const verification = wrapper(async (req, res) => {
     { isVerified: true, verificationCode: null, verificationExpiry: null },
   );
 
-  const newTasksData = new TaskModel({
+  const newNotesData = new NoteModel({
     user: user.email,
-    tasks: [],
+    notes: [],
   });
-  await newTasksData.save();
+  await newNotesData.save();
 
   await sendWelcomeEmail(user.username, user.email);
 
@@ -322,14 +322,14 @@ const deleteAccountConfirmation = wrapper(async (req, res) => {
       message: "Invalid confirmation code",
     });
 
-  if (user.confirmationExpiry < new Date())
+  if (user.confimationExpiry < new Date())
     return res.status(401).json({
       status: 401,
       message: "Confirmation code expired",
     });
 
   await AccountModel.deleteOne({ email });
-  await TaskModel.deleteOne({ user: email });
+  await NoteModel.deleteOne({ user: email });
 
   return res.status(202).json({
     status: 202,
