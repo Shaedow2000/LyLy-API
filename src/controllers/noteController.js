@@ -1,9 +1,9 @@
 import wrapper from "../middlewares/asyncWrapper.js";
-import TaskModel from "../models/task.js";
+import NoteModel from "../models/note.js";
 
 const getAll = wrapper(async (req, res) => {
   const userEmail = req.user.email;
-  const notes = await TaskModel.findOne({ user: userEmail }, { __v: false });
+  const notes = await NoteModel.findOne({ user: userEmail }, { __v: false });
 
   return res.status(200).json({
     status: 200,
@@ -15,9 +15,9 @@ const getAll = wrapper(async (req, res) => {
 const getById = wrapper(async (req, res) => {
   const userEmail = req.user.email;
 
-  const data = await TaskModel.findOne({ user: userEmail }, { __v: false });
+  const data = await NoteModel.findOne({ user: userEmail }, { __v: false });
 
-  const note = data.tasks.find((task) => String(task._id) === req.params.id);
+  const note = data.notes.find((note) => String(note._id) === req.params.id);
 
   if (!note) {
     return res.status(404).json({
@@ -39,9 +39,9 @@ const post = wrapper(async (req, res) => {
   const { title, text } = req.body;
   const newNote = { title, text };
 
-  await TaskModel.findOneAndUpdate(
+  await NoteModel.findOneAndUpdate(
     { user: userEmail },
-    { $push: { tasks: newNote } },
+    { $push: { notes: newNote } },
     { returnDocument: "after", runValidators: true },
   );
 
@@ -56,14 +56,14 @@ const patchById = wrapper(async (req, res) => {
   const userEmail = req.user.email;
   const { title, text } = req.body;
 
-  const data = await TaskModel.findOne({ user: userEmail }, { __v: false });
+  const data = await NoteModel.findOne({ user: userEmail }, { __v: false });
 
-  const note = data.tasks.find((task) => String(task._id) === req.params.id);
+  const note = data.notes.find((note) => String(note._id) === req.params.id);
 
   if (!note) {
     return res.status(404).json({
       status: 404,
-      message: `Task with id [ ${req.params.id} ] was not found`,
+      message: `Note with id [ ${req.params.id} ] was not found`,
       data: null,
     });
   }
@@ -82,9 +82,9 @@ const patchById = wrapper(async (req, res) => {
 
 const deleteById = wrapper(async (req, res) => {
   const userEmail = req.user.email;
-  const data = await TaskModel.findOne({ user: userEmail }, { __v: false });
+  const data = await NoteModel.findOne({ user: userEmail }, { __v: false });
 
-  if (!data.tasks.find((note) => String(note._id) === req.params.id)) {
+  if (!data.notes.find((note) => String(note._id) === req.params.id)) {
     return res.status(404).json({
       status: 404,
       message: `Note with id [ ${req.params.id} ] was not found`,
@@ -92,7 +92,7 @@ const deleteById = wrapper(async (req, res) => {
     });
   }
 
-  data.tasks = data.tasks.filter((note  => String(note._id) !== req.params.id);
+  data.notes = data.notes.filter((note) => String(note._id) !== req.params.id);
 
   await data.save();
 
