@@ -179,7 +179,7 @@ const reset_password = wrapper(async (req, res) => {
   if (!user.abilityToChangePassword)
     return res.status(403).json({
       status: 403,
-      message: "Account not found.",
+      message: "Account not found",
     });
 
   const salt = 10;
@@ -303,6 +303,39 @@ const deleteAccountRequest = wrapper(async (req, res) => {
       account: undefined,
     });
   }
+});
+
+const deleteAccountConfirmation = wrapper(async (req, res) => {
+  const { email, code } = req.body;
+  const user = await AccountModel.findOne({ email }, { __v: false });
+
+  if (!user)
+    return res.status(404).json({
+      status: 404,
+      message: "Account not found",
+      account: null,
+    });
+
+  if (code !== user.confirmationCode)
+    return res.status(401).json({
+      status: 401,
+      message: "Invalid confirmation code",
+    });
+
+  if (user.confirmationExpiry < new Date())
+    return res.status(401).json({
+      status: 401,
+      message: "Confirmation code expired",
+    });
+
+  await AccountModel.deleteOne({ email });
+  await TaskModel.deleteOne({ user: email });
+
+  return res.status(202).json({
+    status: 202,
+    message: "Account deleted successfully",
+    account: null,
+  });
 });
 
 export {
