@@ -9,6 +9,7 @@ import {
   login,
   reset_password,
   deleteAccountRequest,
+  deleteAccountConfirmation,
 } from "../controllers/authController.js";
 
 const publicRouter = express.Router();
@@ -19,10 +20,11 @@ publicRouter.post("/register", register);
 publicRouter.post("/verify", verification);
 publicRouter.post("/reverify", resend_code);
 publicRouter.post("/reset_verification", reset_password_verification);
-publicRouter.post("/password_reset", reset_password);
+publicRouter.patch("/password_reset", reset_password);
 
 publicRouter.get("/user/:id", abortChangingPassword);
 
-publicRouter.delete("/unregister", deleteAccountRequest);
+publicRouter.post("/unregister", deleteAccountRequest);
+publicRouter.delete("/confirmation", deleteAccountConfirmation);
 
 export default publicRouter;

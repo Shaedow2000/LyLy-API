@@ -347,4 +347,5 @@ export {
   abortChangingPassword,
   login,
   deleteAccountRequest,
+  deleteAccountConfirmation,
 };
