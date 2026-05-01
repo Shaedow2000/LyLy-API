@@ -269,7 +269,7 @@ const login = wrapper(async (req, res) => {
   }
 });
 
-const deleteAccount = wrapper(async (req, res) => {
+const deleteAccountRequest = wrapper(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await AccountModel.findOne({ email }, { __v: false });
@@ -277,12 +277,17 @@ const deleteAccount = wrapper(async (req, res) => {
   if (user) {
     const isUser = await bcrypt.compare(password, user.password);
     if (isUser) {
-      await AccountModel.deleteOne({ email });
-      await TaskModel.deleteOne({ user: email });
+      const code = crypto.randomInt(100000, 999999).toString();
+      const expiry = new Date(Data.now(), 10 * 60 * 1000);
+
+      await AccountModel.findOneAndUpdate(
+        { email },
+        { confirmationCode: code, confirmationExpiry: expiry },
+      );
+
       return res.status(202).json({
         status: 202,
-        message: "Account deleted successfully",
-        account: null,
+        message: `New confirmation code sent to ${email}`,
       });
     } else {
       return res.status(401).json({
@@ -308,5 +313,5 @@ export {
   reset_password,
   abortChangingPassword,
   login,
-  deleteAccount,
+  deleteAccountRequest,
 };

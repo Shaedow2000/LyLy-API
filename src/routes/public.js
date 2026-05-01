@@ -7,8 +7,8 @@ import {
   resend_code,
   abortChangingPassword,
   login,
-  deleteAccount,
   reset_password,
+  deleteAccountRequest,
 } from "../controllers/authController.js";
 
 const publicRouter = express.Router();
@@ -23,6 +23,6 @@ publicRouter.post("/password_reset", reset_password);
 
 publicRouter.get("/user/:id", abortChangingPassword);
 
-publicRouter.delete("/unregister", deleteAccount);
+publicRouter.delete("/unregister", deleteAccountRequest);
 
 export default publicRouter;
