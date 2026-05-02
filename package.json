@@ -1,21 +1,25 @@
 {
-  "name": "taskmanager-api",
+  "name": "thinc-api",
   "version": "1.0.0",
   "description": "Simple task manager api.",
   "keywords": [
-    "task-manager",
+    "webapp",
+    "app",
+    "web",
+    "notes",
+    "notes manager",
     "api",
     "nodejs",
     "expressjs",
     "backend"
   ],
-  "homepage": "https://github.com/Shaedow2000/TaskManager-API#readme",
+  "homepage": "https://github.com/Shaedow2000/Thinc-API#readme",
   "bugs": {
-    "url": "https://github.com/Shaedow2000/TaskManager-API/issues"
+    "url": "https://github.com/Shaedow2000/Thinc-API/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shaedow2000/TaskManager-API.git"
+    "url": "git+https://github.com/Shaedow2000/Thinc-API.git"
   },
   "license": "Apache-2.0",
   "author": "Shaedow2000",
