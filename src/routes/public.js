@@ -14,12 +14,12 @@ import {
 
 const publicRouter = express.Router();
 
-publicRouter.get("/login", login);
-
+publicRouter.post("/login", login);
 publicRouter.post("/register", register);
 publicRouter.post("/verify", verification);
 publicRouter.post("/reverify", resend_code);
 publicRouter.post("/reset_verification", reset_password_verification);
+
 publicRouter.patch("/password_reset", reset_password);
 
 publicRouter.get("/user/:id", abortChangingPassword);
