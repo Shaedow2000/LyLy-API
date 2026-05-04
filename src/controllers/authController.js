@@ -15,24 +15,36 @@ import {
 
 const register = wrapper(async (req, res) => {
   const { username, email, password } = req.body;
-  const data = { username, email, password };
   const salt = 10;
 
-  data.password = await bcrypt.hash(data.password, salt);
+  if (password.length < 6)
+    return res.status(400).json({
+      status: 400,
+      message:
+        " password: Password should contain at least 6 characters or more",
+    });
+
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   const code = crypto.randomInt(100000, 999999).toString();
 
-  data.verificationCode = code;
-  data.verificationExpiry = new Date(Date.now() + 10 * 60 * 1000);
+  const verificationCode = code;
+  const verificationExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
-  const newAccount = new AccountModel(data);
+  const newAccount = new AccountModel({
+    username,
+    email,
+    password: hashedPassword,
+    verificationCode,
+    verificationExpiry,
+  });
   await newAccount.save();
 
-  await sendVerificationEmail(data.username, data.email, code);
+  await sendVerificationEmail(username, email, code);
 
   return res.status(202).json({
     status: 202,
-    message: `Verification code sent to ${data.email}. Please check you email.`,
+    message: `Verification code sent to ${email}. Please check you email.`,
   });
 });
 
