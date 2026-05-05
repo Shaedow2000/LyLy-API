@@ -31,8 +31,8 @@ const sendWelcomeEmail = async (username, email) => {
   await transporter.sendMail({
     from: process.env.ZOHO_MAIL,
     to: email,
-    subject: `Welcome to Thinc!`,
-    hmtl: /* html */ `
+    subject: "Welcome to Thinc!",
+    html: /* html */ `
       <h2>Hello ${username},</h2>
       <p>We give you a big welcome to our app! We activated your account, and now you can freely use it!</p>
       <p>Start your journey now, just click on the <a href="https://example.com">link</a> to be redirected to the WebApp.</p>

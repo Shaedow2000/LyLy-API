@@ -103,8 +103,8 @@ const resend_code = wrapper(async (req, res) => {
     });
 
   if (user.isVerified)
-    return res.status(401).json({
-      status: 401,
+    return res.status(202).json({
+      status: 202,
       message: "Account already verified",
     });
 
