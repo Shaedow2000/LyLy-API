@@ -11,6 +11,8 @@ import {
   sendWelcomeEmail,
   sendPasswordResetVerificationCode,
   sendPasswordChangedEmail,
+  sendDeleteConfirmationEmail,
+  sendDeletedAccountEmail,
 } from "../config/mail.js";
 
 const register = wrapper(async (req, res) => {
@@ -299,12 +301,14 @@ const deleteAccountRequest = wrapper(async (req, res) => {
     const isUser = await bcrypt.compare(password, user.password);
     if (isUser) {
       const code = crypto.randomInt(100000, 999999).toString();
-      const expiry = new Date(Data.now(), 10 * 60 * 1000);
+      const expiry = new Date(Date.now(), 10 * 60 * 1000);
 
       await AccountModel.findOneAndUpdate(
         { email },
         { confirmationCode: code, confirmationExpiry: expiry },
       );
+
+      await sendDeleteConfirmationEmail(user.username, user.email, code);
 
       return res.status(202).json({
         status: 202,
@@ -351,6 +355,8 @@ const deleteAccountConfirmation = wrapper(async (req, res) => {
 
   await AccountModel.deleteOne({ email });
   await NoteModel.deleteOne({ user: email });
+
+  await sendDeletedAccountEmail(user.username, user.email);
 
   return res.status(202).json({
     status: 202,

@@ -78,9 +78,42 @@ const sendPasswordChangedEmail = async (username, email) => {
   });
 };
 
+const sendDeleteConfirmationEmail = async (username, email, code) => {
+  await transporter.sendMail({
+    from: process.env.ZOHO_MAIL,
+    to: email,
+    subject: "Unregister confirmation code",
+    html: /* html */ `
+      <h2>Hello ${username},</h2>
+      <p>We've sent this code to this email, cause we got a request to delete its Thinc account.</p>
+      <p>Use this code to confirm the operation:</p>
+      <h3><b>${code}</b></h3>
+      </br>
+      <p>Salutes, from Thinc Dev Team</p>
+    `,
+  });
+};
+
+const sendDeletedAccountEmail = async (username, email) => {
+  await transporter.sendMail({
+    from: process.env.ZOHO_MAIL,
+    to: email,
+    subject: "Unregistered sucessfully",
+    html: /* html */ `
+      <h2>Hello ${username},</h2>
+      <p>We have sucessfully deleted your account along side all its data.</p>
+      <p>We really appretiate that you used our app, and now we give you a big GoodBye!</p>
+      </br>
+      <p>Salutes, from Thinc Dev Team</p>
+    `,
+  });
+};
+
 export {
   sendVerificationEmail,
   sendWelcomeEmail,
   sendPasswordResetVerificationCode,
   sendPasswordChangedEmail,
+  sendDeleteConfirmationEmail,
+  sendDeletedAccountEmail,
 };
