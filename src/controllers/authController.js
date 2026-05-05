@@ -375,6 +375,7 @@ const tokenAuth = wrapper(async (req, res) => {
     status: 200,
     message: "Valid JWT token",
     account: {
+      _id: user._id,
       username: user.username,
       email: user.email,
     },
