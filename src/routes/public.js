@@ -10,6 +10,7 @@ import {
   reset_password,
   deleteAccountRequest,
   deleteAccountConfirmation,
+  tokenAuth,
 } from "../controllers/authController.js";
 
 const publicRouter = express.Router();
@@ -23,6 +24,7 @@ publicRouter.post("/reset_verification", reset_password_verification);
 publicRouter.patch("/password_reset", reset_password);
 
 publicRouter.get("/user/:id", abortChangingPassword);
+publicRouter.get("/tokenAuth", tokenAuth);
 
 publicRouter.post("/unregister", deleteAccountRequest);
 publicRouter.delete("/confirmation", deleteAccountConfirmation);

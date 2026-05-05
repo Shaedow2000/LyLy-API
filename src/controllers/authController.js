@@ -92,9 +92,9 @@ const verification = wrapper(async (req, res) => {
     status: 201,
     message: "Account created successfully!",
     account: {
-      _id: verifiedAccount._id,
-      username: verifiedAccount.username,
-      email: verifiedAccount.email,
+      _id: user._id,
+      username: user.username,
+      email: user.email,
     },
     token: token,
   });
@@ -359,6 +359,31 @@ const deleteAccountConfirmation = wrapper(async (req, res) => {
   });
 });
 
+const tokenAuth = wrapper(async (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+  const user = await AccountModel.findOne({ email: decodedToken.email });
+
+  if (!user)
+    return res.status(401).json({
+      status: 401,
+      message: "Invalid JWT token",
+    });
+
+  const notes = await NoteModel.findOne({ user: user.email });
+
+  return res.status(200).json({
+    status: 200,
+    message: "Valid JWT token",
+    account: {
+      username: user.username,
+      email: user.email,
+    },
+    notes: notes,
+  });
+});
+
 export {
   register,
   verification,
@@ -369,4 +394,5 @@ export {
   login,
   deleteAccountRequest,
   deleteAccountConfirmation,
+  tokenAuth,
 };
