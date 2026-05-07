@@ -73,10 +73,12 @@ const patchById = wrapper(async (req, res) => {
 
   await data.save();
 
+  const notes = await NoteModel.findOne({ user: userEmail }, { __v: false });
+
   return res.status(202).json({
     status: 202,
     message: `Note updated sucessfully`,
-    data: note,
+    data: notes,
   });
 });
 
